@@ -41,8 +41,12 @@ def ReadPoints(ls):
     return points
 
 def main():
-    if not os.path.exists(KMLDIR):
+    if ~os.path.exists(KMLDIR):
         os.makedirs(KMLDIR)
+        return print(f'File input directory created! Place exported .kml files into {KMLDIR}.')
+    
+    if ~os.path.exists(XMLDIR):
+        os.makedirs(XMLDIR)
 
     for file in glob.glob(KMLDIR+'\\*_RTCC.kml'):
         print(file)
