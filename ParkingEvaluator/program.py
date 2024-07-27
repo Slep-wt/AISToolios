@@ -15,32 +15,37 @@ def ToISO(dd):
         assembly += str(round(dd,7))
     return assembly
 
-if not os.path.exists(KMLDIR):
-    os.makedirs(KMLDIR)
-
-for file in glob.glob(KMLDIR+'\\*_PARKING.kml'):
-    print(file)
-    filename = file
-    tree = et.parse(filename)
-    bays = {}
-
-    for pm in tree.iterfind('.//{0}Placemark'.format(ns)):
-        name = pm.find('{0}name'.format(ns)).text
-
-        for ls in pm.iterfind('{0}Point/{0}coordinates'.format(ns)):
-            rcoords = [ToISO(float(i)) for i  in ls.text.strip().replace('\n','')[:-2].split(',')[::-1]]
-            coords = rcoords[0]+rcoords[1]
-            bays[name] = coords
-
-    sorted_bays = dict(sorted(bays.items()))
-    filename = filename.replace('kml','xml');
-    if not os.path.exists('Coords'):
-        os.makedirs('Coords')
-    with open('Coords\\' + filename.replace(KMLDIR + '\\', ''), 'w') as f:
-        f.write('<!--' + filename.replace('_PARKING.xml','') + ' Parking Coordinates-->\n')
-        for key, value in sorted_bays.items():
-            f.write('<Point Name="'+key+'">'+value+'</Point>\n')
+def main():
+    if ~os.path.exists(KMLDIR):
+        os.makedirs(KMLDIR)
+        return print(f'File input directory created! Place exported .kml files into {KMLDIR}.')
     
+    if ~os.path.exists(XMLDIR):
+        os.makedirs(XMLDIR)
 
+    for file in glob.glob(KMLDIR+'\\*_PARKING.kml'):
+        print(file)
+        filename = file
+        tree = et.parse(filename)
+        bays = {}
 
+        for pm in tree.iterfind('.//{0}Placemark'.format(ns)):
+            name = pm.find('{0}name'.format(ns)).text
+
+            for ls in pm.iterfind('{0}Point/{0}coordinates'.format(ns)):
+                rcoords = [ToISO(float(i)) for i  in ls.text.strip().replace('\n','')[:-2].split(',')[::-1]]
+                coords = rcoords[0]+rcoords[1]
+                bays[name] = coords
+
+        sorted_bays = dict(sorted(bays.items()))
+        filename = filename.replace('kml','xml');
+        if not os.path.exists('Coords'):
+            os.makedirs('Coords')
+        with open('Coords\\' + filename.replace(KMLDIR + '\\', ''), 'w') as f:
+            f.write('<!--' + filename.replace('_PARKING.xml','') + ' Parking Coordinates-->\n')
+            for key, value in sorted_bays.items():
+                f.write('<Point Name="'+key+'">'+value+'</Point>\n')
+    
+if __name__ == '__main__':
+    main()
 
