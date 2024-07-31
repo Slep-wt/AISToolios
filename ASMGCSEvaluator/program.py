@@ -16,7 +16,7 @@ def ToISO(dd):
     return assembly
 
 def main():
-    if ~os.path.exists(KMLDIR):
+    if not os.path.exists(KMLDIR):
         os.makedirs(KMLDIR)
         return print(f'File input directory created! Place exported .kml files into {KMLDIR}.')
     
