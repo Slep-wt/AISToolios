@@ -76,11 +76,11 @@ def main():
             fl.write(f'<?xml version="1.0" encoding="utf-8"?>\n<Maps>\n<Map Type="System2" Name="{ad} RTCC" Priority="2" Center="0+0">')
             fl.write(f'<!-- {ad} RTCC Lines-->\n')
             for definition in lines:
-                fl.write(f'<!-- {key} -->\n')
+                fl.write(f'<!-- {definition[0]} -->\n')
                 fl.write('<Line Pattern="Dotted" Width="1.5">\n')
                 fl.write('<Point>')
                 for index, x in enumerate(definition[1]):
-                    if (index == len(definition[0])):
+                    if (index == len(definition[1])-1):
                         fl.write(str(x[0])+str(x[1]))
                     else:
                         fl.write(str(x[0])+str(x[1])+'/')
@@ -90,7 +90,7 @@ def main():
             for definition in points:
                 fl.write(f'<!-- MVA{definition[0]} -->\n')
                 fl.write('<Label HasLeader="false">\n')
-                fl.write(f'<Point Name="{definition[0]}">{definition[0][0][0]}{definition[0][0][1]}</Point>\n')
+                fl.write(f'<Point Name="{definition[0]}">{definition[1][0][0]}{definition[1][0][1]}</Point>\n')
                 fl.write('</Label>\n')
             fl.write('</Map>\n')
             fl.write('</Maps>\n')
